@@ -9,6 +9,11 @@ Home Page: https://github.com/pasnox/qmake-extensions
 Issues Tracker: https://github.com/pasnox/qmake-extensions/issues
 Wiki/Help: https://github.com/pasnox/qmake-extensions/wiki
 
+Usage
+=====
+
+include( path/tp/qmake-extensions.pri )
+
 Help & Examples
 ===============
 
