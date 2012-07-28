@@ -18,17 +18,17 @@ Q_HOST_OS = $${QMAKE_HOST.os}
 Q_LOWER_HOST_OS = $$lower( $${Q_HOST_OS} )
 
 win32 {
-	!isEqual(  Q_LOWER_HOST_OS, "windows" ) {
+    !isEqual(  Q_LOWER_HOST_OS, "windows" ) {
         # we are cross building for windows
-		CONFIG *= cb_win32
-	}
+        CONFIG *= cb_win32
+    }
 }
 
 macx {
-	!isEqual(  Q_LOWER_HOST_OS, "darwin" ) {
+    !isEqual(  Q_LOWER_HOST_OS, "darwin" ) {
         # we are cross building for mac os x
-		CONFIG *= cb_mac
-	}
+        CONFIG *= cb_mac
+    }
 }
 
 # the build target os
