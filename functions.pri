@@ -160,6 +160,17 @@ defineTest( autoGenerateFile ) {
             }
         }
         
+        # create target path if needed
+        path = $$dirname( generator.target )
+        
+        !isEmpty( path ):!exists( $${path} ) {
+            win32:!cb_win32 {
+                system( "mkdir $${path}" )
+            } else {
+                system( "mkdir -p $${path}" )
+            }
+        }
+        
         # Get template content
         generator.content = $$cat( $${generator.source}, false )
         
@@ -167,7 +178,7 @@ defineTest( autoGenerateFile ) {
         #generator.variables = $$find( generator.content, "\\$\\$[^\s\$]+" )
         
         # Generate the find variables command
-        generator.commands = "grep -E -i -o '\\$\\$[$${Q_OPENING_BRACE}]?[^ $${Q_QUOTE}$]+[$${Q_OPENING_BRACE}]?' $${generator.source}"
+        generator.commands = "grep -E -i -o '\\$\\$[$${Q_OPENING_BRACE}]?[[:alnum:]_-]+[$${Q_CLOSING_BRACE}]?' $${generator.source}"
         win32:!cb_win32:generator.commands = "grep command not available."
         
         # Get template variables name
