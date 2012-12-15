@@ -40,3 +40,6 @@ defineTest( setTargetDirectory ) {
 
 defineTest( autoGenerateFile ) {
 }
+
+defineTest( isShadowBuild ) {
+}

@@ -229,3 +229,14 @@ defineTest( autoGenerateFile ) {
         system( $${generator.commands} )
     }
 }
+
+defineTest( isShadowBuild ) {
+    q_makefile_pwd = $${_PRO_FILE_PWD_}
+    q_out_makefile_pwd = $${OUT_PWD}
+    
+    isEqual( q_makefile_pwd, $${q_out_makefile_pwd} ) {
+        return( false )
+    } else {
+        return( true )
+    }
+}

@@ -57,7 +57,7 @@ Q_CLOSING_BRACE = "\\}"
 
 # include functions
 isEmpty( translations_pass ) {
-    include( $$PWD/functions.pri )
+    include( $${PWD}/functions.pri )
 } else {
-    include( $$PWD/fake-functions.pri )
+    include( $${PWD}/fake-functions.pri )
 }
