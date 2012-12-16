@@ -60,7 +60,7 @@ defineReplace( getFolders ) {
 # $$4: Optional parameter to forbid some filters
 defineReplace( getRelativeFolders ) {
     q_folders = $$getFolders( $$1, $$4 )
-    q_folders = $$replace( q_folders, $$2, $$3 )
+    q_folders = $$replace( q_folders, $$re_escape( $$2 ), $$3 )
     
     #message( Getting relative folders for $$q_paths: $$q_folders )
     
