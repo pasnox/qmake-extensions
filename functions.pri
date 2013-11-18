@@ -29,7 +29,7 @@ defineReplace( getFolders ) {
 
         _q_folders  = $$system( $$command )
         _q_folders *= $$1
-        
+
         _q_folders = $$replace( _q_folders, $$Q_BACK_SLASH, $$Q_SLASH )
 
         # loop paths
@@ -42,12 +42,13 @@ defineReplace( getFolders ) {
                 !isEmpty( result ):filtered = true
             }
 
-            isEqual( filtered, false ):exists( $$q_folder ) {
+            #isEqual( filtered, false ):exists( $$q_folder ) {
+            isEqual( filtered, false ) {
                 q_folders   *= $$q_folder
             }
         }
     }
-    
+
     #message( Getting folders for $$q_paths: $$q_folders )
 
     return( $$q_folders )
@@ -61,9 +62,9 @@ defineReplace( getFolders ) {
 defineReplace( getRelativeFolders ) {
     q_folders = $$getFolders( $$1, $$4 )
     q_folders = $$replace( q_folders, $$re_escape( $$2 ), $$3 )
-    
+
     #message( Getting relative folders for $$q_paths: $$q_folders )
-    
+
     return( $$q_folders )
 }
 
@@ -83,14 +84,14 @@ defineReplace( targetForMode ) {
     q_target    = $$1
     q_mode  = $$2
     isEmpty( q_mode ):q_mode    = $$buildMode()
-    
+
     isEqual( q_mode, release ) {
         q_target    = $$quote( $$q_target )
     } else {
         unix:q_target   = $$quote( $$join( q_target, , , _debug ) )
         else:q_target   = $$quote( $$join( q_target, , , d ) )
     }
-    
+
     return( $$q_target )
 }
 
@@ -130,7 +131,7 @@ defineTest( setTemporaryDirectories ) {
 defineTest( setTargetDirectory ) {
     DESTDIR = $$1
     export( DESTDIR )
-    
+
     win32|cb_win32:CONFIG( shared ) {
         DLLDESTDIR = $$1
         export( DLLDESTDIR )
@@ -144,13 +145,13 @@ defineTest( autoGenerateFile ) {
     !build_pass {
         generator.source = $${1}
         generator.target = $${2}
-        
+
         # Replace slashes by back slashes on native windows host
         win32:!cb_win32 {
             generator.source = $$replace( generator.source, $${Q_SLASH}, $${Q_BACK_SLASH} )
             generator.target = $$replace( generator.target, $${Q_SLASH}, $${Q_BACK_SLASH} )
         }
-        
+
         # Delete existing file
         exists( $${generator.target} ) {
             win32:!cb_win32 {
@@ -159,10 +160,10 @@ defineTest( autoGenerateFile ) {
                 system( "rm $${generator.target}" )
             }
         }
-        
+
         # create target path if needed
         path = $$dirname( generator.target )
-        
+
         !isEmpty( path ):!exists( $${path} ) {
             win32:!cb_win32 {
                 system( "mkdir $${path}" )
@@ -170,20 +171,20 @@ defineTest( autoGenerateFile ) {
                 system( "mkdir -p $${path}" )
             }
         }
-        
+
         # Get template content
         generator.content = $$cat( $${generator.source}, false )
-        
+
         # Find template variables name
         #generator.variables = $$find( generator.content, "\\$\\$[^\s\$]+" )
-        
+
         # Generate the find variables command
         generator.commands = "grep -E -i -o '\\$\\$[$${Q_OPENING_BRACE}]?[[:alnum:]_-]+[$${Q_CLOSING_BRACE}]?' $${generator.source}"
         win32:!cb_win32:generator.commands = "grep command not available."
-        
+
         # Get template variables name
         generator.variables = $$system( $${generator.commands} )
-        
+
         #message( cmd: $${generator.commands} )
         #message( Variables: $$generator.variables )
 
@@ -194,12 +195,12 @@ defineTest( autoGenerateFile ) {
             name = $$replace( name, $${Q_DOLLAR}, "" )
             name = $$replace( name, $${Q_OPENING_BRACE}, "" )
             name = $$replace( name, $${Q_CLOSING_BRACE}, "" )
-            
+
             generator.content = $$replace( generator.content, $${Q_DOLLAR}$${Q_DOLLAR}$${Q_OPENING_BRACE}$${name}$${Q_CLOSING_BRACE}, $$eval( $${name} ) )
             generator.content = $$replace( generator.content, $${Q_DOLLAR}$${Q_DOLLAR}$${name}, $$eval( $${name} ) )
             #message( --- Found: $$variable ($$name) - $$eval( $$name ) )
         }
-        
+
         # escape characters that are special for windows echo command
         win32:!cb_win32 {
             generator.content = $$replace( generator.content, "\\^", "^^" )
@@ -216,16 +217,16 @@ defineTest( autoGenerateFile ) {
             generator.content = $$replace( generator.content, $${Q_BACK_SLASH}$${Q_BACK_SLASH}, $${Q_BACK_SLASH}$${Q_BACK_SLASH}$${Q_BACK_SLASH} )
             generator.content = $$replace( generator.content, $${Q_QUOTE}, $${Q_BACK_SLASH}$${Q_QUOTE} )
         }
-        
+
         message( Generating $${generator.target}... )
-        
+
         win32:!cb_win32 {
             generator.content = $$replace( generator.content, "\\n", ">> $${generator.target} && echo." )
             generator.commands = "echo ^ $${generator.content} >> $${generator.target}"
         } else {
             generator.commands = "echo \" $${generator.content}\" > $${generator.target}"
         }
-        
+
         system( $${generator.commands} )
     }
 }
@@ -233,7 +234,7 @@ defineTest( autoGenerateFile ) {
 defineTest( isShadowBuild ) {
     q_makefile_pwd = $${_PRO_FILE_PWD_}
     q_out_makefile_pwd = $${OUT_PWD}
-    
+
     isEqual( q_makefile_pwd, $${q_out_makefile_pwd} ) {
         return( false )
     } else {
