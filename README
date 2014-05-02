@@ -1,6 +1,6 @@
 qmake-extensions repository is a place for custm QMake Project Include extensions that you can embed in your QMake project.
 With that you got access to new and useful functions helping you to easier manage your project.
-It's developped by Filipe AZEVEDO (Nox P@sNox, pasnox@gmail.com)
+It's developped by Filipe Azevedo (Nox P@sNox, pasnox@gmail.com)
 
 Licensed in LGPL v3
 ===================
